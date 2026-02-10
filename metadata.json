@@ -1,0 +1,7 @@
+{
+  "name": "Veira | Best POS System Kenya - Cloud Retail & Restaurant Software",
+  "description": "Buy the best POS system in Kenya. Veira offers affordable cloud POS software with Mpesa integration, inventory management, and offline capabilities for retail and restaurants in Nairobi.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
