@@ -26,10 +26,9 @@ const WaveBackground: React.FC<{ opacity?: number }> = ({ opacity = 0.15 }) => {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Construction: Thousands of thin, continuous lines
-      // We simulate "thousands" by rendering a few dozen parametric bundles
-      const bundles = 8;
-      const linesPerBundle = 12;
+      // Optimized line counts for better performance
+      const bundles = 6;
+      const linesPerBundle = 4; // Reduced from 12 to 4 for speed
       
       ctx.lineWidth = 0.5;
       ctx.strokeStyle = COLORS.softWavePurple;
@@ -41,18 +40,18 @@ const WaveBackground: React.FC<{ opacity?: number }> = ({ opacity = 0.15 }) => {
           ctx.beginPath();
           ctx.globalAlpha = (opacity / linesPerBundle) * (1 - l / linesPerBundle);
           
-          const offset = l * 2;
-          const speedFactor = 0.002 + (b * 0.0005);
+          const offset = l * 4;
+          const speedFactor = 0.001 + (b * 0.0003);
           
-          for (let x = 0; x <= window.innerWidth; x += 20) {
+          // Increased step size from 20 to 50 for fewer path commands
+          for (let x = 0; x <= window.innerWidth; x += 50) {
             const relX = x / window.innerWidth;
             
-            // Parametric curves: Layered parallax, constant speed
-            const wave1 = Math.sin(relX * 3 + time * speedFactor + b) * 40;
-            const wave2 = Math.cos(relX * 1.5 - time * (speedFactor * 0.8) + b) * 20;
-            const wave3 = Math.sin(relX * 5 + time * 0.01 + l * 0.1) * 5;
+            // Simplified parametric curves for reduced CPU load
+            const wave1 = Math.sin(relX * 2.5 + time * speedFactor + b) * 35;
+            const wave2 = Math.cos(relX * 1.2 - time * (speedFactor * 0.7) + b) * 15;
             
-            const y = yBase + wave1 + wave2 + wave3 + offset;
+            const y = yBase + wave1 + wave2 + offset;
             
             if (x === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
@@ -61,7 +60,7 @@ const WaveBackground: React.FC<{ opacity?: number }> = ({ opacity = 0.15 }) => {
         }
       }
 
-      time += 1;
+      time += 0.8; // Adjusted time increment
       animationFrameId = requestAnimationFrame(draw);
     };
 
@@ -78,7 +77,8 @@ const WaveBackground: React.FC<{ opacity?: number }> = ({ opacity = 0.15 }) => {
   return (
     <canvas 
       ref={canvasRef} 
-      className="fixed inset-0 pointer-events-none z-0 bg-[#2C0D36]" 
+      className="fixed inset-0 pointer-events-none z-0 bg-[#2C0D36] will-change-transform" 
+      aria-hidden="true"
     />
   );
 };

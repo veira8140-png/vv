@@ -16,8 +16,15 @@ const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener('scroll', handleScroll);
+    let lastScrollY = window.scrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - lastScrollY) > 10) {
+        setScrolled(currentScrollY > 80);
+        lastScrollY = currentScrollY;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
     const sequence = [
       { state: OrbState.SYNCING, delay: 1500 },
@@ -32,42 +39,48 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen relative flex flex-col items-center bg-[#2C0D36] selection:bg-teal-500/30">
+    <div className="min-h-screen relative flex flex-col items-center bg-[#2C0D36] selection:bg-teal-500/30 font-inter">
       <WaveBackground opacity={scrolled ? 0.05 : 0.12} />
 
-      <header className={`fixed top-0 w-full z-50 transition-all duration-700 px-6 py-6 ${scrolled ? 'bg-white/95 backdrop-blur-xl translate-y-0 shadow-sm' : 'bg-transparent translate-y-2'}`}>
+      <header 
+        className={`fixed top-0 w-full z-50 transition-all duration-700 px-6 py-6 ${scrolled ? 'bg-white/95 backdrop-blur-xl translate-y-0 shadow-sm border-b border-black/5' : 'bg-transparent translate-y-2'}`}
+        role="banner"
+      >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div 
-            className={`flex items-center gap-3 group cursor-pointer transition-colors duration-500 text-black`}
+            className="flex items-center gap-3 group cursor-pointer transition-colors duration-500 text-black outline-none focus-visible:ring-2 focus-visible:ring-purple-600 rounded-lg p-1"
             onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
+            role="link"
+            aria-label="Veira Home"
+            tabIndex={0}
           >
             <Orb size={32} state={orbState} interactive={false} />
             <span className="font-didot text-2xl tracking-tighter font-bold lowercase">veira</span>
           </div>
           
-          <nav className={`hidden lg:flex items-center gap-10 text-[10px] font-bold tracking-[0.25em] uppercase transition-colors duration-500 text-black/60`}>
-            <a href="#retail-pos-system-kenya" className="hover:text-purple-600 transition-colors">POS</a>
-            <a href="#agents" className="hover:text-purple-600 transition-colors">AI Agents</a>
-            <a href="#cloud-pos-system-kenya" className="hover:text-purple-600 transition-colors">Cloud</a>
-            <a href="#enterprise-pos-solution" className="hover:text-purple-600 transition-colors">Enterprise</a>
-            <a href="#our-story" className="hover:text-purple-600 transition-colors">Our Story</a>
+          <nav className="hidden lg:flex items-center gap-10 text-[10px] font-bold tracking-[0.25em] uppercase transition-colors duration-500 text-black/60" role="navigation">
+            <a href="#retail-pos-system-kenya" className="hover:text-purple-600 focus-visible:text-purple-600 outline-none transition-colors">POS</a>
+            <a href="#agents" className="hover:text-purple-600 focus-visible:text-purple-600 outline-none transition-colors">AI Agents</a>
+            <a href="#cloud-pos-system-kenya" className="hover:text-purple-600 focus-visible:text-purple-600 outline-none transition-colors">Cloud</a>
+            <a href="#enterprise-pos-solution" className="hover:text-purple-600 focus-visible:text-purple-600 outline-none transition-colors">Enterprise</a>
+            <a href="#our-story" className="hover:text-purple-600 focus-visible:text-purple-600 outline-none transition-colors">Our Story</a>
             <a 
               href="#contact" 
-              className={`px-6 py-2 rounded-full border transition-all border-black/10 hover:bg-black text-white bg-black`}
+              className="px-6 py-2 rounded-full border transition-all border-black/10 hover:bg-black hover:text-white bg-black text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
             >
               Get Started
             </a>
           </nav>
           
-          <div className={`lg:hidden text-black`}>
+          <button className="lg:hidden text-black p-2 rounded-lg hover:bg-black/5 focus-visible:ring-2 focus-visible:ring-purple-600" aria-label="Toggle Menu">
             <Icons.Menu className="w-6 h-6" />
-          </div>
+          </button>
         </div>
       </header>
 
-      <main className="w-full relative z-10">
+      <main className="w-full relative z-10" role="main">
         <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 relative overflow-hidden bg-white">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] bg-purple-100/40 rounded-full blur-[160px] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] bg-purple-100/40 rounded-full blur-[160px] pointer-events-none" aria-hidden="true" />
           
           <div className="max-w-5xl space-y-10 relative z-10">
             <h1 className="font-playfair text-6xl md:text-9xl tracking-tight leading-[0.9] text-black">
@@ -79,8 +92,9 @@ const App: React.FC = () => {
             
             <div className="pt-10">
               <button 
-                className="px-14 py-6 font-bold text-white rounded-full text-lg shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-4 mx-auto"
+                className="px-14 py-6 font-bold text-white rounded-full text-lg shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-4 mx-auto outline-none focus-visible:ring-4 focus-visible:ring-teal-500/50"
                 style={{ backgroundColor: COLORS.ctaTeal }}
+                aria-label="Buy POS System Now"
               >
                 BUY POS SYSTEM NOW
                 <Icons.ArrowRight className="w-5 h-5" />
@@ -89,13 +103,13 @@ const App: React.FC = () => {
 
             <div className="mt-16 flex flex-col items-center gap-6 transition-opacity duration-1000 delay-500">
               <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-black/30">As Featured on Product Hunt</span>
-              <a href="https://www.producthunt.com/products/veira-kenya/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-veira&#0045;kenya" target="_blank" className="hover:opacity-80 transition-opacity">
-                <img src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1151101&theme=neutral" alt="Veira Kenya - The POS system with inventory management Kenya | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
+              <a href="https://www.producthunt.com/products/veira-kenya/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-veira&#0045;kenya" target="_blank" className="hover:opacity-80 transition-opacity outline-none focus-visible:ring-2 focus-visible:ring-purple-600 rounded-lg p-2">
+                <img src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1151101&theme=neutral" alt="Veira Kenya Reviews on Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" loading="lazy" />
               </a>
             </div>
           </div>
           
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-20">
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-20" aria-hidden="true">
             <div className="w-px h-12 bg-black" />
           </div>
         </section>

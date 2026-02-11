@@ -16,7 +16,7 @@ const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className 
 
   // Smooth mouse tracking physics (Lerp)
   useEffect(() => {
-    if (!interactive) return;
+    if (!interactive || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     let targetX = 0;
     let targetY = 0;
@@ -27,18 +27,22 @@ const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className 
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
       const { innerWidth, innerHeight } = window;
-      targetX = (clientX / innerWidth - 0.5) * 40;
-      targetY = (clientY / innerHeight - 0.5) * 40;
+      targetX = (clientX / innerWidth - 0.5) * 30; // Slightly reduced travel
+      targetY = (clientY / innerHeight - 0.5) * 30;
     };
 
     const animate = () => {
-      currentX = lerp(currentX, targetX, 0.05);
-      currentY = lerp(currentY, targetY, 0.05);
+      if (Math.abs(targetX - currentX) < 0.01 && Math.abs(targetY - currentY) < 0.01) {
+        requestAnimationFrame(animate);
+        return;
+      }
+      currentX = lerp(currentX, targetX, 0.08); // Faster snap
+      currentY = lerp(currentY, targetY, 0.08);
       setOffset({ x: currentX, y: currentY });
       requestAnimationFrame(animate);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     const animId = requestAnimationFrame(animate);
 
     return () => {
@@ -57,21 +61,24 @@ const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className 
     }
   }, [state]);
 
-  const pulseDuration = state === OrbState.SYNCING ? '2s' : '6s';
+  const pulseDuration = state === OrbState.SYNCING ? '1.5s' : '6s';
 
   return (
     <div 
       ref={containerRef}
+      role="img"
+      aria-label={`System status: ${state}`}
       className={`relative flex items-center justify-center transition-all duration-1000 ${className}`}
       style={{ 
         width: size, 
         height: size,
-        transform: `translate(${offset.x}px, ${offset.y}px)`,
+        transform: `translate3d(${offset.x}px, ${offset.y}px, 0)`,
+        willChange: 'transform'
       }}
     >
       {/* Veira Orb Halo (Outer Glow) */}
       <div 
-        className="absolute inset-0 rounded-full blur-[60px] transition-opacity duration-1000"
+        className="absolute inset-0 rounded-full blur-[60px] transition-opacity duration-1000 pointer-events-none"
         style={{ 
           background: `radial-gradient(circle, ${COLORS.highlightPurpleStart} 0%, transparent 70%)`,
           opacity: glowIntensity * 0.4,
@@ -88,7 +95,7 @@ const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className 
       >
         {/* Layer 1: Intelligence Motion (Subtle) */}
         <div 
-          className="absolute inset-[-50%] opacity-20 mix-blend-soft-light animate-[spin_25s_linear_infinite]"
+          className="absolute inset-[-50%] opacity-20 mix-blend-soft-light animate-[spin_30s_linear_infinite]"
           style={{
             background: `conic-gradient(from 0deg, transparent, white, transparent, white, transparent)`,
             filter: 'blur(20px)',
@@ -111,7 +118,7 @@ const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className 
           style={{
             background: `linear-gradient(to bottom, white, transparent)`,
             filter: 'blur(6px)',
-            transform: `translate(${offset.x * 0.3}px, ${offset.y * 0.3}px)`,
+            transform: `translate3d(${offset.x * 0.2}px, ${offset.y * 0.2}px, 0)`,
           }}
         />
       </div>
