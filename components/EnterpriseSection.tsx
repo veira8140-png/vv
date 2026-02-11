@@ -79,7 +79,10 @@ const EnterpriseSection: React.FC = () => {
             </button>
           </div>
           <div className="flex-1 relative flex justify-center">
-            <Orb state={OrbState.IDLE} size={450} className="opacity-80" />
+            {/* Removed large Orb hero */}
+            <div className="w-[450px] h-[450px] rounded-full border border-white/5 flex items-center justify-center bg-white/[0.02]">
+                <Icons.Dashboard className="w-32 h-32 text-purple-400/30" />
+            </div>
             <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
               <svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="50" y="200" width="100" height="150" stroke="white" strokeWidth="1" rx="4" />
@@ -100,22 +103,22 @@ const EnterpriseSection: React.FC = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
             <div className="space-y-4">
-              <Orb size={32} state={OrbState.ACTIVE} className="mb-4" />
+              <Icons.Dashboard className="w-8 h-8 text-purple-400 mb-4" />
               <h3 className="text-xl font-bold font-playfair">Centralized Oversight</h3>
               <p className="text-white/60 text-sm leading-relaxed">Monitor multiple sites, departments, or teams in real time with consolidated data on performance, resources, and outcomes.</p>
             </div>
             <div className="space-y-4">
-              <Orb size={32} state={OrbState.SYNCING} className="mb-4" />
+              <Icons.Sync className="w-8 h-8 text-purple-400 mb-4" />
               <h3 className="text-xl font-bold font-playfair">AI-Driven Decisions</h3>
               <p className="text-white/60 text-sm leading-relaxed">Glenn and Achi handle calls, leads, and orders at scale while increasing efficiency automatically.</p>
             </div>
             <div className="space-y-4">
-              <Orb size={32} state={OrbState.IDLE} className="mb-4" />
+              <Icons.Cloud className="w-8 h-8 text-purple-400 mb-4" />
               <h3 className="text-xl font-bold font-playfair">Reliable Cloud Sync</h3>
               <p className="text-white/60 text-sm leading-relaxed">Secure, real-time synchronization ensures your data is accurate and protected across all Kenya locations instantly.</p>
             </div>
             <div className="space-y-4">
-              <Orb size={32} state={OrbState.SUCCESS} className="mb-4" />
+              <Icons.Protection className="w-8 h-8 text-purple-400 mb-4" />
               <h3 className="text-xl font-bold font-playfair">Operational Certainty</h3>
               <p className="text-white/60 text-sm leading-relaxed">Automated reporting and workflow guidance reduce dependency on manual checks, keeping your expansion smooth.</p>
             </div>
@@ -278,7 +281,7 @@ const EnterpriseSection: React.FC = () => {
             <div className="absolute w-64 h-[500px] bg-white border border-gray-200 rounded-[3rem] shadow-2xl p-4 rotate-0 z-10">
                <div className="w-full h-full bg-white rounded-[2rem] overflow-hidden flex flex-col">
                   <div className="h-48 bg-purple-600 flex items-center justify-center">
-                    <Orb size={64} state={OrbState.ACTIVE} />
+                    <Icons.Cloud className="w-16 h-16 text-white/50" />
                   </div>
                   <div className="p-6 space-y-4">
                     <div className="h-4 w-1/2 bg-gray-100 rounded" />

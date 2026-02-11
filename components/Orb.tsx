@@ -11,7 +11,6 @@ interface OrbProps {
 }
 
 const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className = "", interactive = true }) => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -28,8 +27,7 @@ const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className 
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
       const { innerWidth, innerHeight } = window;
-      // Calculate normalized position (-1 to 1)
-      targetX = (clientX / innerWidth - 0.5) * 40; // Max 40px movement
+      targetX = (clientX / innerWidth - 0.5) * 40;
       targetY = (clientY / innerHeight - 0.5) * 40;
     };
 
@@ -81,25 +79,25 @@ const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className 
         }}
       />
       
-      {/* Main Orb Body - "Form: Intelligence, Continuity" */}
+      {/* Main Orb Body - Updated to Plain Purple Gradient */}
       <div 
-        className="relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_2px_20px_rgba(255,255,255,0.2)] border border-white/10"
+        className="relative w-full h-full rounded-full overflow-hidden shadow-[inset_0_2px_15px_rgba(255,255,255,0.3)] border border-white/10"
         style={{
-          background: `radial-gradient(circle at 35% 35%, ${COLORS.highlightPurpleEnd} 0%, ${COLORS.darkRoyalPurple} 60%, ${COLORS.deepPlum} 100%)`,
+          background: `radial-gradient(circle at 35% 35%, ${COLORS.highlightPurpleEnd} 0%, ${COLORS.highlightPurpleStart} 100%)`,
         }}
       >
-        {/* Layer 1: Intelligence Motion (The "Sauce" swirl) */}
+        {/* Layer 1: Intelligence Motion (Subtle) */}
         <div 
-          className="absolute inset-[-50%] opacity-40 mix-blend-soft-light animate-[spin_25s_linear_infinite]"
+          className="absolute inset-[-50%] opacity-20 mix-blend-soft-light animate-[spin_25s_linear_infinite]"
           style={{
-            background: `conic-gradient(from 0deg, transparent, ${COLORS.highlightPurpleStart}, transparent, ${COLORS.highlightPurpleEnd}, transparent)`,
+            background: `conic-gradient(from 0deg, transparent, white, transparent, white, transparent)`,
             filter: 'blur(20px)',
           }}
         />
         
-        {/* Layer 2: Data Flow (Particles/Glow) */}
+        {/* Layer 2: Data Flow (Subtle) */}
         <div 
-          className="absolute inset-0 opacity-30 animate-[pulse_4s_ease-in-out_infinite]"
+          className="absolute inset-0 opacity-20 animate-[pulse_4s_ease-in-out_infinite]"
           style={{
             backgroundImage: `radial-gradient(circle at 50% 50%, white 0%, transparent 10%)`,
             backgroundSize: '40% 40%',
@@ -109,18 +107,14 @@ const Orb: React.FC<OrbProps> = ({ state = OrbState.IDLE, size = 300, className 
 
         {/* Top Surface Specular Highlight */}
         <div 
-          className="absolute top-2 left-1/4 w-1/2 h-1/4 opacity-30 rounded-full"
+          className="absolute top-1 left-1/4 w-1/2 h-1/4 opacity-40 rounded-full"
           style={{
             background: `linear-gradient(to bottom, white, transparent)`,
-            filter: 'blur(8px)',
-            transform: `translate(${offset.x * 0.5}px, ${offset.y * 0.5}px)`,
+            filter: 'blur(6px)',
+            transform: `translate(${offset.x * 0.3}px, ${offset.y * 0.3}px)`,
           }}
         />
       </div>
-
-      <style>{`
-        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
 };

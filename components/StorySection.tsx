@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { COLORS, Icons } from '../constants.tsx';
 import { OrbState } from '../types';
@@ -37,7 +38,10 @@ const StorySection: React.FC = () => {
             </div>
           </div>
           <div className="flex-1 flex justify-center">
-             <Orb size={400} state={OrbState.ACTIVE} className="opacity-90" />
+             {/* Replaced large Orb with abstract visual */}
+             <div className="w-[400px] h-[400px] rounded-full border border-white/5 flex items-center justify-center bg-white/[0.01]">
+                <Icons.Protection className="w-24 h-24 text-purple-400/20" />
+             </div>
           </div>
         </div>
       </section>
@@ -154,7 +158,7 @@ const StorySection: React.FC = () => {
       {/* Simple Message */}
       <section className="relative py-40 px-6 text-center border-b border-white/5">
         <div className="max-w-4xl mx-auto space-y-8 relative z-10">
-          <Orb size={64} state={OrbState.IDLE} className="mx-auto mb-12" />
+          {/* Removed Orb divider */}
           <h2 className="text-4xl md:text-5xl font-playfair leading-tight italic">
             Veira is more than a tool. <br />
             It’s a team, a system, and a mission.

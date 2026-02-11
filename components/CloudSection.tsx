@@ -41,9 +41,11 @@ const CloudSection: React.FC = () => {
             </div>
           </div>
           <div className="flex-1 relative flex justify-center items-center">
-            {/* Cloud Visualization */}
+            {/* Replaced large Orb with Cloud Icon Visualization */}
             <div className="relative">
-              <Orb state={OrbState.SYNCING} size={380} className="z-10" />
+              <div className="w-[380px] h-[380px] rounded-full bg-white/[0.02] border border-white/5 flex items-center justify-center">
+                <Icons.Cloud className="w-32 h-32 text-purple-400/40 animate-[pulse_6s_ease-in-out_infinite]" />
+              </div>
               <div className="absolute -inset-10 opacity-20 animate-[spin_30s_linear_infinite] pointer-events-none">
                 <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="250" cy="250" r="200" stroke="white" strokeWidth="1" strokeDasharray="10 10" />
